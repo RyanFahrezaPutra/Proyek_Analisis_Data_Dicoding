@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 @st.cache_data
 def load_data():
     try:
-        file_path = "main_data.csv"
+        file_path = "dashboard/main_data.csv"
         df = pd.read_csv(file_path)
         return df
     except FileNotFoundError:
