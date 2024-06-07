@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load data
 @st.cache_data
@@ -17,8 +18,11 @@ def pm10_distribution(data):
     data['year'] = pd.to_datetime(data['year'], format='%Y').dt.year
     return data.groupby('year')['PM10'].mean()
 
-def rainy_days_per_year(data):
-    return data[data['RAIN'] > 0].groupby('year')['day'].nunique()
+def feature_distribution(data):
+    features = ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3']
+    total = data[features].sum().sum()
+    proportions = data[features].sum() / total
+    return proportions
 
 # Main function to run the dashboard
 def main():
@@ -41,28 +45,23 @@ def main():
         st.pyplot(fig1)
         st.write("""
                 **Analisis:**
-                PM10 adalah kualitas udara yang cukup berbahaya. berdasarkan hasil 
-                visualisai yang didapat, PM10 ini memuncak di tahun 2014, namun di tahun 2017 
+                PM10 adalah kualitas udara yang cukup berbahaya. Berdasarkan hasil 
+                visualisasi yang didapat, PM10 ini memuncak di tahun 2014, namun di tahun 2017 
                 sudah menurun dan bisa dipastikan bahwa kualitas udara jadi lebih bersih dan lebih baik.
             """)
 
-        # Plot rainy days per year
-        st.header('Rainy Days per Year')
-        rainy_days_data = rainy_days_per_year(data)
-        fig2, ax2 = plt.subplots(figsize=(10, 6))
-        ax2.bar(rainy_days_data.index, rainy_days_data.values, color='blue')
-        ax2.set_xlabel('Year')
-        ax2.set_ylabel('Rainy Days')
-        ax2.set_title('Jumlah Hari Hujan per Tahun di Guanyuan (2013-2017)')
-        ax2.grid(axis='y')
+        # Plot feature distribution
+        st.header('Feature Distribution')
+        feature_data = feature_distribution(data)
+        fig2, ax2 = plt.subplots(figsize=(10, 8))
+        ax2.pie(feature_data, labels=feature_data.index, autopct='%1.1f%%', startangle=90)
+        ax2.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        ax2.set_title('Distribusi Fitur')
         st.pyplot(fig2)
         st.write("""
                 **Analisis:**
-                Sepertinya kekurangan data pada tahun 2017 sehingga curah hujan mengecil, 
-                ataupun curah hujan memang tak nampak pada tahun itu. dilihat dari jumlah PM10 dan data 
-                curah hujan, tidak memiliki kaitan yang 
-                signifikan satu sama lain. bisa disimpulkan disini 
-                bahwa curah hujan tidak terlalu berpengaruh.
+                Dari visualisasi yang kita lihat, komponen yang paling sedikit terdapat pada guangyan 
+                adalah SO2 dengan hanya 1,1%. berbeda jauh dengan komponen terbanyak yaitu CO yang mencapai 79,2%.
             """)
 
 if __name__ == "__main__":
