@@ -61,7 +61,7 @@ def main():
         st.write("""
                 **Analisis:**
                 Dari visualisasi yang kita lihat, komponen yang paling sedikit terdapat pada guangyan 
-                adalah SO2 dengan hanya 1,1%. berbeda jauh dengan komponen terbanyak yaitu CO yang mencapai 79,2%.
+                adalah SO2 dengan hanya 1,1%. berbeda jauh dengan komponen terbanyak yaitu CO yang mencapai 77,1%.
             """)
 
 if __name__ == "__main__":
